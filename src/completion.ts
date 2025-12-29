@@ -11,7 +11,7 @@ import { Document_Selector_Markdown } from './util/generic';
 import * as katexFuncs from './util/katex-funcs';
 
 export function activate(context: ExtensionContext) {
-    context.subscriptions.push(languages.registerCompletionItemProvider(Document_Selector_Markdown, new MdCompletionItemProvider(), '(', '\\', '/', '[', '#'));
+    context.subscriptions.push(languages.registerCompletionItemProvider(Document_Selector_Markdown, new MdCompletionItemProvider(), '(', '\\', '/', '[', '#', '{'));
 }
 
 interface IReferenceDefinition {
@@ -159,6 +159,20 @@ class MdCompletionItemProvider implements CompletionItemProvider {
             }
         }
 
+        // MyST Directives
+        // ================
+        // e.g. ```{directive|
+        if (/^[ \t]*[`]{3,}\{[a-zA-Z\-]*$/.test(lineTextBefore)) {
+            return this.completeMystDirectives(lineTextBefore);
+        }
+
+        // MyST Roles
+        // ==========
+        // e.g. {role|
+        if (/\{[a-zA-Z\-]*$/.test(lineTextBefore) && !/^[ \t]*[`]{3,}\{[a-zA-Z\-]*$/.test(lineTextBefore)) {
+            return this.completeMystRoles(lineTextBefore);
+        }
+
         // Reference link labels
         // =====================
         // e.g. [linklabel]: link "link title"
@@ -196,6 +210,75 @@ class MdCompletionItemProvider implements CompletionItemProvider {
         }
 
         return [];
+    }
+
+    private completeMystDirectives(lineTextBefore: string): CompletionItem[] {
+        const mystDirectives = [
+            { name: 'note', description: 'Create a note admonition', snippet: 'note}\n$1\n```' },
+            { name: 'tip', description: 'Create a tip admonition', snippet: 'tip}\n$1\n```' },
+            { name: 'warning', description: 'Create a warning admonition', snippet: 'warning}\n$1\n```' },
+            { name: 'important', description: 'Create an important admonition', snippet: 'important}\n$1\n```' },
+            { name: 'danger', description: 'Create a danger admonition', snippet: 'danger}\n$1\n```' },
+            { name: 'error', description: 'Create an error admonition', snippet: 'error}\n$1\n```' },
+            { name: 'figure', description: 'Create a figure', snippet: 'figure} ${1:image.png}\n:name: ${2:fig-label}\n:width: ${3:300px}\n\n${4:Caption text}\n```' },
+            { name: 'code-block', description: 'Create a code block', snippet: 'code-block} ${1:python}\n:linenos:\n:caption: ${2:Code caption}\n\n${3:# Your code here}\n```' },
+            { name: 'code-cell', description: 'Create an executable code cell', snippet: 'code-cell}\n:tags: [${1:tag1, tag2}]\n\n${2:# Your code here}\n```' },
+            { name: 'math', description: 'Create a math block', snippet: 'math}\n:label: ${1:eq-label}\n\n${2:E = mc^2}\n```' },
+            { name: 'table', description: 'Create a table', snippet: 'table} ${1:Table title}\n:name: ${2:tbl-label}\n\n| ${3:Column 1} | ${4:Column 2} |\n| --- | --- |\n| ${5:Data 1} | ${6:Data 2} |\n```' },
+            { name: 'bibliography', description: 'Create a bibliography', snippet: 'bibliography}\n```' },
+            { name: 'glossary', description: 'Create a glossary', snippet: 'glossary}\n\n${1:term}\n  ${2:Definition of the term}\n```' },
+            { name: 'contents', description: 'Create a table of contents', snippet: 'contents}\n:depth: ${1:2}\n:local:\n```' },
+            { name: 'include', description: 'Include another file', snippet: 'include} ${1:path/to/file.md}\n```' },
+            { name: 'literalinclude', description: 'Include a code file', snippet: 'literalinclude} ${1:path/to/file.py}\n:language: ${2:python}\n:lines: ${3:1-10}\n```' },
+            { name: 'card', description: 'Create a card layout', snippet: 'card} ${1:Card title}\n\n${2:Card content}\n```' },
+            { name: 'grid', description: 'Create a grid layout', snippet: 'grid} ${1:2}\n\n${2:Grid content}\n```' },
+            { name: 'tab-set', description: 'Create tabbed content', snippet: 'tab-set}\n\n:::{tab-item} ${1:Tab 1}\n${2:Content for tab 1}\n:::\n\n:::{tab-item} ${3:Tab 2}\n${4:Content for tab 2}\n:::\n```' }
+        ];
+
+        const typed = lineTextBefore.match(/\{([a-zA-Z\-]*)$/)?.[1] || '';
+        
+        return mystDirectives
+            .filter(directive => directive.name.startsWith(typed))
+            .map(directive => {
+                const item = new CompletionItem(directive.name, CompletionItemKind.Snippet);
+                item.insertText = new SnippetString(directive.snippet);
+                item.documentation = new MarkdownString(directive.description);
+                item.detail = `MyST Directive: ${directive.name}`;
+                return item;
+            });
+    }
+
+    private completeMystRoles(lineTextBefore: string): CompletionItem[] {
+        const mystRoles = [
+            { name: 'ref', description: 'Cross-reference to a label', snippet: 'ref}\`${1:label-name}\`' },
+            { name: 'doc', description: 'Link to another document', snippet: 'doc}\`${1:path/to/document}\`' },
+            { name: 'download', description: 'Download link', snippet: 'download}\`${1:path/to/file}\`' },
+            { name: 'cite', description: 'Citation reference', snippet: 'cite}\`${1:citation-key}\`' },
+            { name: 'math', description: 'Inline math', snippet: 'math}\`${1:x^2 + y^2}\`' },
+            { name: 'eq', description: 'Reference to equation', snippet: 'eq}\`${1:equation-label}\`' },
+            { name: 'numref', description: 'Numbered reference', snippet: 'numref}\`${1:figure-label}\`' },
+            { name: 'code', description: 'Inline code with language', snippet: 'code}\`${1:python} ${2:print("hello")}\`' },
+            { name: 'kbd', description: 'Keyboard input', snippet: 'kbd}\`${1:Ctrl+C}\`' },
+            { name: 'guilabel', description: 'GUI label', snippet: 'guilabel}\`${1:File > Open}\`' },
+            { name: 'menuselection', description: 'Menu selection', snippet: 'menuselection}\`${1:File --> Open}\`' },
+            { name: 'file', description: 'File path', snippet: 'file}\`${1:path/to/file}\`' },
+            { name: 'term', description: 'Glossary term', snippet: 'term}\`${1:terminology}\`' },
+            { name: 'abbr', description: 'Abbreviation', snippet: 'abbr}\`${1:abbreviation (full form)}\`' },
+            { name: 'sup', description: 'Superscript', snippet: 'sup}\`${1:text}\`' },
+            { name: 'sub', description: 'Subscript', snippet: 'sub}\`${1:text}\`' }
+        ];
+
+        const typed = lineTextBefore.match(/\{([a-zA-Z\-]*)$/)?.[1] || '';
+        
+        return mystRoles
+            .filter(role => role.name.startsWith(typed))
+            .map(role => {
+                const item = new CompletionItem(role.name, CompletionItemKind.Function);
+                item.insertText = new SnippetString(role.snippet);
+                item.documentation = new MarkdownString(role.description);
+                item.detail = `MyST Role: ${role.name}`;
+                return item;
+            });
     }
 
     private completeImgPaths(document: TextDocument, lineTextBefore: string) {

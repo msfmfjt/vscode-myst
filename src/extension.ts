@@ -16,6 +16,7 @@ import * as print from './print';
 import * as tableFormatter from './tableFormatter';
 import * as toc from './toc';
 import { importZolaSlug } from './util/slugify';
+import * as mystCommands from './mystCommands';
 
 export function activate(context: ExtensionContext) {
     configNls({ extensionContext: context });
@@ -51,6 +52,8 @@ function activateMdExt(context: ExtensionContext) {
     tableFormatter.activate(context);
     // Auto show preview to side
     preview.activate(context);
+    // MyST-specific commands
+    mystCommands.activate(context);
 
     // Allow `*` in word pattern for quick styling (toggle bold/italic without selection)
     // original https://github.com/microsoft/vscode/blob/3e5c7e2c570a729e664253baceaf443b69e82da6/extensions/markdown-basics/language-configuration.json#L55

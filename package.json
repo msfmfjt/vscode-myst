@@ -1,10 +1,10 @@
 {
-    "name": "markdown-all-in-one",
-    "displayName": "%ext.displayName%",
-    "description": "%ext.description%",
+    "name": "myst-all-in-one",
+    "displayName": "MyST All in One",
+    "description": "All you need for MyST Markdown (MyST syntax, advanced editing, table of contents, auto preview and more)",
     "icon": "images/Markdown-mark.png",
-    "version": "3.6.3",
-    "publisher": "yzhang",
+    "version": "1.0.0",
+    "publisher": "mystx",
     "engines": {
         "vscode": "^1.77.0"
     },
@@ -14,21 +14,28 @@
         "Other"
     ],
     "keywords": [
-        "markdown"
+        "markdown",
+        "myst",
+        "mystmd",
+        "jupyter-book",
+        "scientific-documentation"
     ],
     "bugs": {
-        "url": "https://github.com/yzhang-gh/vscode-markdown/issues"
+        "url": "https://github.com/mystx/vscode-myst-all-in-one/issues"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/yzhang-gh/vscode-markdown"
+        "url": "https://github.com/mystx/vscode-myst-all-in-one"
     },
     "license": "MIT",
     "activationEvents": [
         "onLanguage:markdown",
+        "onLanguage:myst",
         "onLanguage:rmd",
         "onLanguage:quarto",
-        "workspaceContains:README.md"
+        "workspaceContains:README.md",
+        "workspaceContains:myst.yml",
+        "workspaceContains:**/*.myst"
     ],
     "main": "./dist/node/main.js",
     "contributes": {
@@ -73,31 +80,31 @@
         "commands": [
             {
                 "command": "markdown.extension.toc.create",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.toc.create.title%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.toc.update",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.toc.update.title%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.toc.addSecNumbers",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.toc.addSecNumbers.title%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.toc.removeSecNumbers",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.toc.removeSecNumbers.title%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.printToHtml",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.printToHtml.title%",
                 "category": "Markdown All in One"
             },
@@ -109,100 +116,142 @@
             },
             {
                 "command": "markdown.extension.editing.toggleCodeSpan",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleCodeSpan.title%",
                 "icon": "$(code)",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.editing.toggleMath",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleMath.title%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.editing.toggleMathReverse",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleMathReverse.title%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.editing.toggleList",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleList.title%",
                 "icon": "$(list-unordered)",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.editing.toggleCodeBlock",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleCodeBlock.title%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.editing.toggleBold",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleBold%",
                 "icon": "$(bold)",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.editing.toggleItalic",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleItalic%",
                 "icon": "$(italic)",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.editing.toggleStrikethrough",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.editing.toggleStrikethrough%",
                 "category": "Markdown All in One"
             },
             {
                 "command": "markdown.extension.checkTaskList",
-                "enablement": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                 "title": "%command.checkTaskList%",
                 "icon": "$(tasklist)",
                 "category": "Markdown All in One"
+            },
+            {
+                "command": "myst.extension.insertDirective",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
+                "title": "Insert MyST Directive",
+                "icon": "$(symbol-structure)",
+                "category": "MyST"
+            },
+            {
+                "command": "myst.extension.insertFigure",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
+                "title": "Insert Figure",
+                "icon": "$(file-media)",
+                "category": "MyST"
+            },
+            {
+                "command": "myst.extension.insertCitation",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
+                "title": "Insert Citation",
+                "icon": "$(references)",
+                "category": "MyST"
+            },
+            {
+                "command": "myst.extension.insertCrossReference",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
+                "title": "Insert Cross Reference",
+                "icon": "$(symbol-reference)",
+                "category": "MyST"
+            },
+            {
+                "command": "myst.extension.insertEquation",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
+                "title": "Insert Numbered Equation",
+                "icon": "$(symbol-numeric)",
+                "category": "MyST"
+            },
+            {
+                "command": "myst.extension.insertCodeCell",
+                "enablement": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
+                "title": "Insert Code Cell",
+                "icon": "$(code)",
+                "category": "MyST"
             }
         ],
         "menus": {
             "editor/context": [
                 {
                     "command": "markdown.extension.printToHtml",
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/",
+                    "when": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/",
                     "group": "markdown.print@1"
                 },
                 {
                     "command": "markdown.extension.printToHtmlBatch",
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
+                    "when": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && workspaceFolderCount >= 1",
                     "group": "markdown.print@2"
                 }
             ],
             "editor/title": [
                 {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
+                    "when": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
                     "command": "markdown.extension.editing.toggleBold",
                     "group": "navigation@1"
                 },
                 {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
+                    "when": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
                     "command": "markdown.extension.editing.toggleItalic",
                     "group": "navigation@2"
                 },
                 {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
+                    "when": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
                     "command": "markdown.extension.editing.toggleCodeSpan",
                     "group": "navigation@3"
                 },
                 {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
+                    "when": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
                     "command": "markdown.extension.editing.toggleList",
                     "group": "navigation@4"
                 },
                 {
-                    "when": "editorLangId =~ /^markdown$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
+                    "when": "editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && config.markdown.extension.showActionButtons",
                     "command": "markdown.extension.checkTaskList",
                     "group": "navigation@5"
                 }
@@ -213,108 +262,108 @@
                 "command": "markdown.extension.editing.toggleBold",
                 "key": "ctrl+b",
                 "mac": "cmd+b",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/"
             },
             {
                 "command": "markdown.extension.editing.toggleItalic",
                 "key": "ctrl+i",
                 "mac": "cmd+i",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/"
             },
             {
                 "command": "markdown.extension.editing.toggleStrikethrough",
                 "key": "alt+s",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !isMac"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !isMac"
             },
             {
                 "command": "markdown.extension.editing.toggleHeadingUp",
                 "key": "ctrl+shift+]",
                 "mac": "ctrl+shift+]",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/"
             },
             {
                 "command": "markdown.extension.editing.toggleHeadingDown",
                 "key": "ctrl+shift+[",
                 "mac": "ctrl+shift+[",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/"
             },
             {
                 "command": "markdown.extension.editing.toggleMath",
                 "key": "ctrl+m",
                 "mac": "cmd+m",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/"
             },
             {
                 "command": "markdown.extension.onEnterKey",
                 "key": "enter",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && vim.mode != 'Normal' && vim.mode != 'Visual' && vim.mode != 'VisualBlock' && vim.mode != 'VisualLine' && vim.mode != 'SearchInProgressMode' && vim.mode != 'CommandlineInProgress' && vim.mode != 'Replace' && vim.mode != 'EasyMotionMode' && vim.mode != 'EasyMotionInputMode' && vim.mode != 'SurroundInputMode' && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && vim.mode != 'Normal' && vim.mode != 'Visual' && vim.mode != 'VisualBlock' && vim.mode != 'VisualLine' && vim.mode != 'SearchInProgressMode' && vim.mode != 'CommandlineInProgress' && vim.mode != 'Replace' && vim.mode != 'EasyMotionMode' && vim.mode != 'EasyMotionInputMode' && vim.mode != 'SurroundInputMode' && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
             },
             {
                 "command": "markdown.extension.onCtrlEnterKey",
                 "key": "ctrl+enter",
                 "mac": "cmd+enter",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
             },
             {
                 "command": "markdown.extension.onShiftEnterKey",
                 "key": "shift+enter",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && (!suggestWidgetVisible || config.editor.acceptSuggestionOnEnter == 'off') && !editorHasMultipleSelections && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
             },
             {
                 "command": "markdown.extension.onTabKey",
                 "key": "tab",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible && !inlineSuggestionVisible && !editorHasMultipleSelections && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !hasOtherSuggestions && markdown.extension.editor.cursor.inList && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv && !tabShouldJumpToInlineEdit && !tabShouldAcceptInlineEdit"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible && !inlineSuggestionVisible && !editorHasMultipleSelections && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !hasOtherSuggestions && markdown.extension.editor.cursor.inList && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv && !tabShouldJumpToInlineEdit && !tabShouldAcceptInlineEdit"
             },
             {
                 "command": "markdown.extension.onShiftTabKey",
                 "key": "shift+tab",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible && !editorHasMultipleSelections && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !hasOtherSuggestions && markdown.extension.editor.cursor.inList && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible && !editorHasMultipleSelections && !editorTabMovesFocus && !inSnippetMode && !hasSnippetCompletions && !hasOtherSuggestions && markdown.extension.editor.cursor.inList && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
             },
             {
                 "command": "markdown.extension.onBackspaceKey",
                 "key": "backspace",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible && !editorHasMultipleSelections && vim.mode != 'Normal' && vim.mode != 'Visual' && vim.mode != 'VisualBlock' && vim.mode != 'VisualLine' && vim.mode != 'SearchInProgressMode' && vim.mode != 'CommandlineInProgress' && vim.mode != 'Replace' && vim.mode != 'EasyMotionMode' && vim.mode != 'EasyMotionInputMode' && vim.mode != 'SurroundInputMode' && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible && !editorHasMultipleSelections && vim.mode != 'Normal' && vim.mode != 'Visual' && vim.mode != 'VisualBlock' && vim.mode != 'VisualLine' && vim.mode != 'SearchInProgressMode' && vim.mode != 'CommandlineInProgress' && vim.mode != 'Replace' && vim.mode != 'EasyMotionMode' && vim.mode != 'EasyMotionInputMode' && vim.mode != 'SurroundInputMode' && !markdown.extension.editor.cursor.inFencedCodeBlock && !markdown.extension.editor.cursor.inMathEnv"
             },
             {
                 "command": "markdown.extension.onMoveLineUp",
                 "key": "alt+up",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible"
             },
             {
                 "command": "markdown.extension.onMoveLineDown",
                 "key": "alt+down",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible"
             },
             {
                 "command": "markdown.extension.onCopyLineUp",
                 "win": "shift+alt+up",
                 "mac": "shift+alt+up",
                 "linux": "ctrl+shift+alt+up",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible"
             },
             {
                 "command": "markdown.extension.onCopyLineDown",
                 "win": "shift+alt+down",
                 "mac": "shift+alt+down",
                 "linux": "ctrl+shift+alt+down",
-                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
+                "when": "editorTextFocus && !editorReadonly && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible"
             },
             {
                 "command": "markdown.extension.onIndentLines",
                 "key": "ctrl+]",
                 "mac": "cmd+]",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
+                "when": "editorTextFocus && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible"
             },
             {
                 "command": "markdown.extension.onOutdentLines",
                 "key": "ctrl+[",
                 "mac": "cmd+[",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !suggestWidgetVisible"
+                "when": "editorTextFocus && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !suggestWidgetVisible"
             },
             {
                 "command": "markdown.extension.checkTaskList",
                 "key": "alt+c",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && !isMac"
+                "when": "editorTextFocus && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && !isMac"
             },
             {
                 "command": "markdown.extension.closePreview",
@@ -332,7 +381,7 @@
                 "command": "markdown.extension.editing.paste",
                 "key": "ctrl+v",
                 "mac": "cmd+v",
-                "when": "editorTextFocus && editorLangId =~ /^markdown$|^rmd$|^quarto$/ && editorHasSelection"
+                "when": "editorTextFocus && editorLangId =~ /^markdown$|^myst$|^rmd$|^quarto$/ && editorHasSelection"
             }
         ],
         "configuration": {
@@ -632,9 +681,24 @@
                 }
             }
         },
+        "languages": [
+            {
+                "id": "myst",
+                "aliases": [
+                    "MyST Markdown",
+                    "myst"
+                ],
+                "extensions": [
+                    ".myst",
+                    ".md"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
         "markdown.markdownItPlugins": true,
         "markdown.previewStyles": [
             "./media/checkbox.css",
+            "./media/myst.css",
             "./node_modules/katex/dist/katex.min.css",
             "./node_modules/markdown-it-github-alerts/styles/github-colors-light.css",
             "./node_modules/markdown-it-github-alerts/styles/github-colors-dark-media.css",
@@ -642,17 +706,27 @@
         ],
         "grammars": [
             {
+                "language": "myst",
+                "scopeName": "text.mystmarkdown",
+                "path": "./syntaxes/myst.tmLanguage.json",
+                "injectTo": [
+                    "text.html.markdown"
+                ]
+            },
+            {
                 "scopeName": "markdown.math_display",
                 "path": "./syntaxes/math_display.markdown.tmLanguage.json",
                 "injectTo": [
-                    "text.html.markdown"
+                    "text.html.markdown",
+                    "text.mystmarkdown"
                 ]
             },
             {
                 "scopeName": "markdown.math_inline",
                 "path": "./syntaxes/math_inline.markdown.tmLanguage.json",
                 "injectTo": [
-                    "text.html.markdown"
+                    "text.html.markdown",
+                    "text.mystmarkdown"
                 ]
             },
             {
@@ -669,8 +743,8 @@
     },
     "scripts": {
         "vscode:prepublish": "npm run build",
-        "build": "npm run build-wasm && node ./build/build.js",
-        "build-wasm": "cd ./src/zola-slug && wasm-pack build --release",
+        "build": "node ./build/build.js",
+        "build-wasm": "echo 'Skipping WASM build - not required for MyST functionality'",
         "dev-build": "webpack --mode development",
         "dev-compile": "tsc --build --watch --verbose",
         "pretest": "tsc --build",
@@ -682,17 +756,20 @@
         "grapheme-splitter": "^1.0.4",
         "highlight.js": "^11.5.1",
         "image-size": "^0.9.3",
+        "js-yaml": "^4.1.0",
         "katex": "^0.16.4",
-        "markdown-it": "^13.0.2",
+        "markdown-it": "^12.3.2",
+        "markdown-it-deflist": "^2.1.0",
+        "markdown-it-footnote": "^3.0.3",
+        "markdown-it-front-matter": "^0.2.3",
         "markdown-it-github-alerts": "^0.1.2",
         "markdown-it-task-lists": "^2.1.1",
-        "string-similarity": "^4.0.4",
-        "zola-slug": "file:./src/zola-slug/pkg"
+        "string-similarity": "^4.0.4"
     },
     "devDependencies": {
         "@types/glob": "^7.2.0",
+        "@types/js-yaml": "^4.0.9",
         "@types/katex": "^0.14.0",
-        "@types/markdown-it": "^13.0.7",
         "@types/mocha": "^9.1.0",
         "@types/node": "~14.18.13",
         "@types/string-similarity": "^4.0.0",

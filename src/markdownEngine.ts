@@ -267,7 +267,7 @@ class MarkdownEngine implements IDynamicMarkdownEngine {
 
         // Arrow function ensures that `this` is inherited from `addNamedHeaders`,
         // so that we won't need `bind`, and save memory a little.
-        md.renderer.rules.heading_open = (tokens, idx, options, env, self) => {
+        md.renderer.rules.heading_open = (tokens: any, idx: any, options: any, env: any, self: any) => {
             const raw = tokens[idx + 1].content;
             let slug = slugify(raw, { env });
 

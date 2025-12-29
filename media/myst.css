@@ -1,0 +1,261 @@
+/* MyST-specific styling for enhanced preview */
+
+/* MyST Directives - Admonitions */
+.admonition {
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    background: #fafafa;
+}
+
+.admonition.note {
+    border-left: 4px solid #3498db;
+    background: #f8f9fa;
+}
+
+.admonition.tip {
+    border-left: 4px solid #2ecc71;
+    background: #f0f8ff;
+}
+
+.admonition.warning {
+    border-left: 4px solid #f39c12;
+    background: #fffbf0;
+}
+
+.admonition.danger,
+.admonition.error {
+    border-left: 4px solid #e74c3c;
+    background: #fff5f5;
+}
+
+.admonition.important {
+    border-left: 4px solid #9b59b6;
+    background: #faf5ff;
+}
+
+.admonition-title {
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.admonition-title::before {
+    content: "📝";
+    margin-right: 8px;
+}
+
+.admonition.note .admonition-title::before { content: "ℹ️"; }
+.admonition.tip .admonition-title::before { content: "💡"; }
+.admonition.warning .admonition-title::before { content: "⚠️"; }
+.admonition.danger .admonition-title::before,
+.admonition.error .admonition-title::before { content: "❌"; }
+.admonition.important .admonition-title::before { content: "❗"; }
+
+/* MyST Code Cells */
+.code-cell {
+    margin: 16px 0;
+    border: 1px solid #e1e4e8;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.code-cell-input {
+    background: #f6f8fa;
+    padding: 16px;
+    border-bottom: 1px solid #e1e4e8;
+}
+
+.code-cell-output {
+    padding: 16px;
+    background: white;
+}
+
+.code-cell-prompt {
+    font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+    font-size: 0.85em;
+    color: #666;
+    margin-right: 12px;
+    min-width: 60px;
+    display: inline-block;
+}
+
+/* MyST Cross References */
+.reference.internal {
+    color: #0969da;
+    text-decoration: none;
+}
+
+.reference.internal:hover {
+    text-decoration: underline;
+}
+
+.reference.external {
+    color: #0969da;
+}
+
+.reference.external::after {
+    content: " ↗";
+    font-size: 0.8em;
+    opacity: 0.6;
+}
+
+/* MyST Math */
+.math {
+    font-family: 'KaTeX_Main', 'Times New Roman', serif;
+}
+
+.math.display {
+    display: block;
+    text-align: center;
+    margin: 16px 0;
+}
+
+.math.inline {
+    display: inline;
+}
+
+/* MyST Figures */
+.figure {
+    margin: 16px auto;
+    text-align: center;
+    max-width: 100%;
+}
+
+.figure img {
+    max-width: 100%;
+    height: auto;
+}
+
+.figure .caption {
+    margin-top: 8px;
+    font-style: italic;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.figure .caption .caption-number {
+    font-weight: bold;
+    color: #333;
+}
+
+/* MyST Definition Lists */
+dt {
+    font-weight: bold;
+    margin-top: 12px;
+}
+
+dd {
+    margin-left: 20px;
+    margin-bottom: 8px;
+}
+
+/* MyST Footnotes */
+.footnote {
+    font-size: 0.85em;
+    color: #666;
+    border-top: 1px solid #eee;
+    padding-top: 8px;
+    margin-top: 24px;
+}
+
+.footnote-ref {
+    vertical-align: super;
+    font-size: 0.7em;
+    text-decoration: none;
+    color: #0969da;
+}
+
+.footnote-ref:hover {
+    text-decoration: underline;
+}
+
+/* MyST Tables */
+table.myst-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 16px 0;
+}
+
+table.myst-table th,
+table.myst-table td {
+    border: 1px solid #dfe2e5;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+table.myst-table th {
+    background-color: #f6f8fa;
+    font-weight: bold;
+}
+
+table.myst-table tbody tr:nth-child(even) {
+    background-color: #f6f8fa;
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .admonition {
+        background: #161b22;
+        border-color: #30363d;
+        color: #e6edf3;
+    }
+    
+    .admonition.note {
+        background: #0d1117;
+    }
+    
+    .admonition.tip {
+        background: #0d1117;
+    }
+    
+    .admonition.warning {
+        background: #1c1e24;
+    }
+    
+    .admonition.danger,
+    .admonition.error {
+        background: #1a1516;
+    }
+    
+    .admonition.important {
+        background: #1a1625;
+    }
+    
+    .code-cell {
+        border-color: #30363d;
+    }
+    
+    .code-cell-input {
+        background: #161b22;
+    }
+    
+    .code-cell-output {
+        background: #0d1117;
+        color: #e6edf3;
+    }
+    
+    .figure .caption {
+        color: #8b949e;
+    }
+    
+    .footnote {
+        color: #8b949e;
+        border-color: #30363d;
+    }
+    
+    table.myst-table th,
+    table.myst-table td {
+        border-color: #30363d;
+    }
+    
+    table.myst-table th {
+        background-color: #161b22;
+    }
+    
+    table.myst-table tbody tr:nth-child(even) {
+        background-color: #161b22;
+    }
+}

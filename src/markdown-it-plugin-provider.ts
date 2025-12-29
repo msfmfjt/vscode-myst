@@ -8,8 +8,18 @@ const katexOptions: KatexOptions = { throwOnError: false };
  * https://code.visualstudio.com/api/extension-guides/markdown-extension#adding-support-for-new-syntax-with-markdownit-plugins
  */
 export function extendMarkdownIt(md: MarkdownIt): MarkdownIt {
+    // Base markdown extensions
     md.use(require("markdown-it-task-lists"), {enabled: true});
-    md.use(require("markdown-it-github-alerts"), { matchCaseSensitive: false })
+    md.use(require("markdown-it-github-alerts"), { matchCaseSensitive: false });
+
+    // MyST-specific extensions
+    md.use(require("markdown-it-footnote"));
+    md.use(require("markdown-it-deflist"));
+    md.use(require("markdown-it-front-matter"), (_fm: string) => {
+        // Handle frontmatter parsing if needed
+    });
+
+    // MyST directives and roles support will be handled by our custom grammar
 
     if (configManager.get("math.enabled")) {
         // We need side effects. (#521)
@@ -24,6 +34,7 @@ export function extendMarkdownIt(md: MarkdownIt): MarkdownIt {
             katexOptions["macros"] = macros;
         }
 
+        // Enhanced math support for MyST
         md.use(require("@neilsustc/markdown-it-katex"), katexOptions);
     }
 

@@ -313,7 +313,7 @@ async function detectTocRanges(doc: TextDocument): Promise<[Array<Range>, string
                 || (token.type === 'ordered_list_open' && token.attrGet('start') === null)
             )
         ) {
-            result.push([...token.map!, index]);
+            result.push([token.map![0], token.map![1], index]);
         }
         return result;
     }, []);
@@ -361,14 +361,14 @@ async function detectTocRanges(doc: TextDocument): Promise<[Array<Range>, string
 
         const tokens = firstItemContent.children!;
         if (workspace.getConfiguration('markdown.extension.toc').get<boolean>('plaintext')) {
-            if (tokens.some(t => t.type.startsWith('link_'))) {
+            if (tokens.some((t: any) => t.type.startsWith('link_'))) {
                 continue;
             }
         } else {
             if (!(
                 tokens[0].type === 'link_open'
                 && tokens[0].attrGet('href')!.startsWith('#') // Destination begins with `#`. (#304)
-                && tokens.findIndex(t => t.type === 'link_close') === (tokens.length - 1) // Only one link. (#549, #683)
+                && tokens.findIndex((t: any) => t.type === 'link_close') === (tokens.length - 1) // Only one link. (#549, #683)
             )) {
                 continue;
             }

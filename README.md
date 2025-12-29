@@ -1,301 +1,183 @@
-# Markdown Support for Visual Studio Code <!-- omit in toc -->
+# MyST All in One for Visual Studio Code
 
-[![version](https://img.shields.io/vscode-marketplace/v/yzhang.markdown-all-in-one.svg?style=flat-square&label=vscode%20marketplace)](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
-[![installs](https://img.shields.io/vscode-marketplace/d/yzhang.markdown-all-in-one.svg?style=flat-square)](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/yzhang-gh/vscode-markdown/main.yml?style=flat-square&branch=master)](https://github.com/yzhang-gh/vscode-markdown/actions)
-[![GitHub stars](https://img.shields.io/github/stars/yzhang-gh/vscode-markdown.svg?style=flat-square&label=github%20stars)](https://github.com/yzhang-gh/vscode-markdown)
-[![GitHub Contributors](https://img.shields.io/github/contributors/yzhang-gh/vscode-markdown.svg?style=flat-square)](https://github.com/yzhang-gh/vscode-markdown/graphs/contributors)
+![MyST Logo](images/Markdown-mark.png)
 
-All you need for Markdown (keyboard shortcuts, table of contents, auto preview and more).
+All you need for MyST Markdown (MyST syntax, scientific documentation, advanced editing, table of contents, auto preview and more).
 
-***Note***: VS Code has basic Markdown support out-of-the-box (e.g, **Markdown preview**), please see the [official documentation](https://code.visualstudio.com/docs/languages/markdown) for more information.
+**MyST (Markedly Structured Text)** is a powerful flavor of Markdown designed for scientific documentation, Jupyter Books, and academic publishing. This extension brings comprehensive MyST support to VS Code with advanced editing features, enhanced previews, and scientific writing tools.
 
-**Table of Contents**
+***Note***: This extension is built on top of the excellent [Markdown All in One](https://github.com/yzhang-gh/vscode-markdown) extension, extending it with full MyST support and scientific documentation features.
 
-- [Features](#features)
-  - [Keyboard shortcuts](#keyboard-shortcuts)
-  - [Table of contents](#table-of-contents)
-  - [List editing](#list-editing)
-  - [Print Markdown to HTML](#print-markdown-to-html)
-  - [GitHub Flavored Markdown](#github-flavored-markdown)
-  - [Math](#math)
-  - [Auto completions](#auto-completions)
-  - [Others](#others)
-- [Available Commands](#available-commands)
-- [Keyboard Shortcuts](#keyboard-shortcuts-1)
-- [Supported Settings](#supported-settings)
-- [FAQ](#faq)
-    - [Q: Error "command 'markdown.extension.onXXXKey' not found"](#q-error-command-markdownextensiononxxxkey-not-found)
-    - [Q: Which Markdown syntax is supported?](#q-which-markdown-syntax-is-supported)
-    - [Q: This extension has overridden some of my key bindings (e.g. <kbd>Ctrl</kbd> + <kbd>B</kbd>, <kbd>Alt</kbd> + <kbd>C</kbd>)](#q-this-extension-has-overridden-some-of-my-key-bindings-eg-ctrl--b-alt--c)
-    - [Q: The extension is unresponsive, causing lag etc. (performance issues)](#q-the-extension-is-unresponsive-causing-lag-etc-performance-issues)
-- [Changelog](#changelog)
-- [Latest Development Build](#latest-development-build)
-- [Contributing](#contributing)
-- [Related](#related)
+## 🚀 Key Features
 
-## Features
+### 📝 Complete MyST Syntax Support
 
-### Keyboard shortcuts
+- **MyST Directives**: Full support for MyST directives like `{note}`, `{warning}`, `{figure}`, `{code-cell}`, and more
+- **MyST Roles**: Inline roles for cross-references, citations, math, and links (`{ref}`, `{cite}`, `{math}`, etc.)
+- **Enhanced Syntax Highlighting**: Custom grammar for MyST-specific syntax elements
+- **Smart Auto-completion**: Context-aware suggestions for directives and roles
 
-<p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/toggle-bold.gif" alt="toggle bold gif" width="282px">
-<br>(Typo: multiple words)</p>
+### 🔬 Scientific Documentation Features
 
-<p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/check-task-list.gif" alt="check task list" width="240px"></p>
+- **Citation Management**: Easy insertion and management of citations with `{cite}` roles
+- **Cross-Reference System**: Powerful cross-referencing with `{ref}`, `{numref}`, and `{eq}` roles
+- **Figure Management**: Advanced figure insertion with captions and labels
+- **Mathematical Equations**: Support for numbered equations with labels and references
+- **Code Cells**: Executable code cells for Jupyter Book integration
+- **Bibliography Support**: Built-in bibliography and glossary management
 
-See full key binding list in the [keyboard shortcuts](#keyboard-shortcuts-1) section
+### 🎨 Enhanced Preview & Rendering
 
-### Table of contents
+- **MyST Preview**: Rich preview with proper MyST directive and role rendering
+- **Scientific Styling**: Custom CSS for admonitions, figures, equations, and code cells
+- **Dark Theme Support**: Beautiful rendering in both light and dark themes
+- **Export Features**: Enhanced HTML export with MyST features preserved
 
-<p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/toc.png" alt="toc" width="305px"></p>
+### ⚡ Advanced Editing Features
 
-- Run command "**Create Table of Contents**" (in the [VS Code Command Palette](https://code.visualstudio.com/docs/getstarted/userinterface#_command-palette)) to insert a new table of contents.
+*Inherited from Markdown All in One plus MyST enhancements:*
 
-- The TOC is **automatically updated** on file save by default. To disable, please change the `toc.updateOnSave` option.
+- **Smart Keyboard Shortcuts**: All the standard markdown shortcuts (Bold, Italic, etc.)
+- **Intelligent List Editing**: Auto-continuation, smart indentation, and task list management
+- **Table Formatter**: Automatic table formatting and editing
+- **Table of Contents**: Auto-generated TOC with MyST cross-reference support
+- **Math Support**: Enhanced KaTeX rendering with MyST math blocks and roles
 
-- The **indentation type (tab or spaces)** of TOC can be configured per file. Find the setting in the right bottom corner of VS Code's status bar.
+## 📋 MyST Commands
 
-  ***Note***: Be sure to also check the `list.indentationSize` option.
+The extension provides several MyST-specific commands accessible via the Command Palette:
 
-- To make TOC **compatible with GitHub or GitLab**, set option `slugifyMode` accordingly
+- **MyST: Insert Directive** - Interactive directive insertion with templates
+- **MyST: Insert Figure** - Guided figure insertion with labels and captions
+- **MyST: Insert Citation** - Quick citation insertion with various styles
+- **MyST: Insert Cross Reference** - Smart cross-reference creation
+- **MyST: Insert Numbered Equation** - Mathematical equation with auto-labeling
+- **MyST: Insert Code Cell** - Executable code cell for Jupyter integration
 
-- Three ways to **control which headings are present** in the TOC:
+## 🎯 Auto-completion Features
 
-  <details>
-  <summary>Click to expand</summary>
+### MyST Directives
+Type \`\`\`{ and get instant suggestions for:
+- `note`, `tip`, `warning`, `danger`, `important`, `error` - Admonition blocks
+- `figure` - Figures with captions and cross-reference labels
+- `code-block`, `code-cell` - Code blocks and executable cells
+- `math` - Mathematical equation blocks
+- `table` - Tables with captions
+- `bibliography`, `glossary`, `contents` - Reference sections
 
-  1. Add `<!-- omit from toc -->` at the end of a heading to ignore it in TOC\
-    (It can also be placed above a heading)
+### MyST Roles
+Type { and get instant suggestions for:
+- `ref`, `numref`, `eq` - Cross-references to labels
+- `cite` - Citations to bibliography entries
+- `doc`, `download` - Document and file links
+- `math` - Inline mathematical expressions
+- `code`, `kbd`, `file` - Inline code and UI elements
+- `term`, `abbr` - Glossary terms and abbreviations
 
-  2. Use `toc.levels` setting.
+## 📚 MyST Syntax Examples
 
-  3. You can also use the `toc.omittedFromToc` setting to omit some headings (and their subheadings) from TOC:
+### Admonitions
+```markdown
+\`\`\`{note}
+This is a note admonition. It will be rendered with a special blue styling.
+\`\`\`
 
-     ```js
-     // In your settings.json
-     "markdown.extension.toc.omittedFromToc": {
-       // Use a path relative to your workspace.
-       "README.md": [
-           "# Introduction",
-           "## Also omitted",
-       ],
-       // Or an absolute path for standalone files.
-       "/home/foo/Documents/todo-list.md": [
-         "## Shame list (I'll never do these)",
-       ]
-     }
-     ```
+\`\`\`{warning}
+This is a warning. It draws attention to important information.
+\`\`\`
+```
 
-     ***Note***:
+### Cross-References and Citations
+```markdown
+See {ref}\`my-figure\` for details.
 
-     - Setext headings (underlined with `===` or `---`) can also be omitted, just put their `# ` and `## ` versions in the setting, respectively.
-     - When omitting heading, **make sure headings within a document are unique**. Duplicate headings may lead to unpredictable behavior.
+According to {cite}\`einstein1905\`, the relationship is described by {eq}\`mass-energy\`.
 
-  </details>
+\`\`\`{math}
+:label: mass-energy
+E = mc^2
+\`\`\`
+```
 
-- Easily add/update/remove **section numbering**
+### Figures and Code Cells
+```markdown
+\`\`\`{figure} path/to/image.png
+:name: my-figure
+:width: 400px
+:alt: Alternative text
 
-  <img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/section-numbers.gif" alt="section numbers" width="768px">
+This is the figure caption.
+\`\`\`
 
-- *In case you are seeing **unexpected TOC recognition**, you can add a `<!-- no toc -->` comment above the list*.
+\`\`\`{code-cell}
+:tags: [hide-input]
 
-### List editing
+import matplotlib.pyplot as plt
+import numpy as np
 
-<p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/on-enter-key.gif" alt="on enter key" width="214px"></p>
+x = np.linspace(0, 10, 100)
+plt.plot(x, np.sin(x))
+plt.show()
+\`\`\`
+```
 
-<p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/tab-backspace.gif" alt="on tab/backspace key" width="214px"></p>
+## ⚙️ Configuration
 
-<p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/fix-marker.gif" alt="fix ordered list markers" width="214px"></p>
+The extension inherits all configuration options from Markdown All in One and adds MyST-specific settings:
 
-***Note***: By default, this extension tries to determine indentation size for different lists according to [CommonMark Spec](https://spec.commonmark.org/0.29/#list-items). If you prefer to use a fixed tab size, please change the `list.indentationSize` setting.
+```json
+{
+  "markdown.extension.math.enabled": true,
+  "markdown.extension.completion.enabled": true,
+  "myst.preview.enable": true,
+  "myst.preview.extensions": ["dollarmath", "amsmath", "deflist", "tasklist"]
+}
+```
 
-### Print Markdown to HTML
+## 🔧 Supported File Types
 
-- Commands `Markdown: Print current document to HTML`
-  and `Markdown: Print documents to HTML` (batch mode)
+- `.md` - Standard Markdown files with MyST syntax
+- `.myst` - Dedicated MyST Markdown files
+- `.rmd` - R Markdown with MyST support
+- `.qmd` - Quarto documents with MyST support
 
-- **Compatible** with other installed Markdown plugins (e.g. [Markdown Footnotes](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-footnotes)).
-  The exported HTML should look the same as inside VS Code (except for a few theme colors due to the limitations of APIs).
+## 🚀 Getting Started
 
-- Use comment `<!-- title: Your Title -->` (in the first line) to specify a title of the exported HTML.
+1. **Install the extension** from the VS Code marketplace
+2. **Open a Markdown file** or create a new `.myst` file
+3. **Start typing MyST syntax** - auto-completion will guide you
+4. **Use Command Palette** (Ctrl+Shift+P) to access MyST commands
+5. **Preview your document** with Ctrl+Shift+V to see rendered MyST
 
-- Plain links to `.md` files will be converted to `.html`.
+## 🎓 Educational Resources
 
-- It's recommended to print the exported HTML to PDF with browser (e.g. Chrome) if you want to share your documents with others.
+- [MyST Documentation](https://mystmd.org/guide)
+- [Jupyter Book Guide](https://jupyterbook.org/intro.html)
+- [MyST Syntax Reference](https://mystmd.org/guide/quickstart-myst-markdown)
+- [Scientific Writing with MyST](https://mystmd.org/guide/frontmatter)
 
-### GitHub Flavored Markdown
+## 🤝 Contributing
 
-- Table formatter
+This extension builds upon the excellent [Markdown All in One](https://github.com/yzhang-gh/vscode-markdown) by Yu Zhang. 
 
-  <p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/table-formatter.gif" alt="table formatter" width="246px"></p>
+For MyST-specific issues and features:
+- Report issues on our [GitHub repository](https://github.com/mystx/vscode-myst-all-in-one)
+- Contribute to MyST syntax and features
+- Help improve scientific documentation workflows
 
-  ***Note***: The key binding is <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>I</kbd> on Linux. See [Visual Studio Code Key Bindings](https://code.visualstudio.com/docs/getstarted/keybindings#_keyboard-shortcuts-reference).
+For base Markdown features:
+- See the original [Markdown All in One repository](https://github.com/yzhang-gh/vscode-markdown)
 
-- Task lists
+## 📄 License
 
-### Math
+MIT License - see [LICENSE](LICENSE) for details.
 
-<p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/math.png" alt="math" width="544px"></p>
+## 🙏 Acknowledgments
 
-Please use [Markdown+Math](https://marketplace.visualstudio.com/items?itemName=goessner.mdmath) for dedicated math support. Be sure to disable `math.enabled` option of this extension.
-
-### Auto completions
-
-Tip: also support the option `completion.root`
-
-- Images/Files (respects option `search.exclude`)
-
-  <p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/image-completions.png" alt="image completions" width="351px"></p>
-
-- Math functions (including option `katex.macros`)
-
-  <p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/math-completions.png" alt="math completions" width="154px"></p>
-
-- Reference links
-
-  <p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/reference-link.png" alt="reference links" width="301px"></p>
-
-### Others
-
-- Paste link on selected text
-
-  <p><img src="https://github.com/yzhang-gh/vscode-markdown/raw/master/images/gifs/paste-link.gif" alt="paste link" width="342px"></p>
-
-- Add "Close Preview" keybinding, which allows you to close the preview tab using the same keybinding of "Open Preview" (<kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> or <kbd>Ctrl</kbd> + <kbd>K</kbd> <kbd>V</kbd>).
-
-## Available Commands
-
-- Markdown All in One: Create Table of Contents
-- Markdown All in One: Update Table of Contents
-- Markdown All in One: Add/Update section numbers
-- Markdown All in One: Remove section numbers
-- Markdown All in One: Toggle code span
-- Markdown All in One: Toggle code block
-- Markdown All in One: Print current document to HTML
-- Markdown All in One: Print documents to HTML
-- Markdown All in One: Toggle math environment
-- Markdown All in One: Toggle list
-  - It will cycle through list markers (by default `-`, `*`, `+`, `1.` and `1)`, which can be changed with option `list.toggle.candidate-markers`).
-
-## Keyboard Shortcuts
-
-<details>
-<summary>Table</summary>
-
-| Key                                                              | Command                          |
-| ---------------------------------------------------------------- | -------------------------------- |
-| <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>B</kbd>                    | Toggle bold                      |
-| <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>I</kbd>                    | Toggle italic                    |
-| <kbd>Alt</kbd>+<kbd>S</kbd> (on Windows)                         | Toggle strikethrough<sup>1</sup> |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>]</kbd>                | Toggle heading (uplevel)         |
-| <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>[</kbd>                | Toggle heading (downlevel)       |
-| <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>M</kbd>                    | Toggle math environment          |
-| <kbd>Alt</kbd> + <kbd>C</kbd>                                    | Check/Uncheck task list item     |
-| <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>V</kbd> | Toggle preview                   |
-| <kbd>Ctrl</kbd>/<kbd>Cmd</kbd> + <kbd>K</kbd> <kbd>V</kbd>       | Toggle preview to side           |
-
-<sup>1. If the cursor is on a list/task item without selection, strikethrough will be added to the whole item (line)</sup>
-
-</details>
-
-## Supported Settings
-
-<details>
-<summary>Table</summary>
-
-| Name                                                       | Default    | Description                                                                                      |
-| ---------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------ |
-| `markdown.extension.completion.respectVscodeSearchExclude` | `true`     | Whether to consider `search.exclude` option when providing file path completions                 |
-| `markdown.extension.completion.root`                       |            | Root folder when providing file path completions (It takes effect when the path starts with `/`) |
-| `markdown.extension.italic.indicator`                      | `*`        | Use `*` or `_` to wrap italic text                                                               |
-| `markdown.extension.bold.indicator`                        | `**`       | Use `**` or `__` to wrap bold text                                                               |
-| `markdown.extension.katex.macros`                          | `{}`       | KaTeX macros e.g. `{ "\\name": "expansion", ... }`                                               |
-| `markdown.extension.list.indentationSize`                  | `adaptive` | Use different indentation size for ordered and unordered list                                    |
-| `markdown.extension.list.toggle.candidate-markers`         | `[ "-", "*", "+", "1.", "1)" ]`  | Use a array for toggle ordered list marker e.g. `["*", "1."]`              |
-| `markdown.extension.orderedList.autoRenumber`              | `true`     | Auto fix list markers as you edits                                                               |
-| `markdown.extension.orderedList.marker`                    | `ordered`  | Or `one`: always use `1.` as ordered list marker                                                 |
-| `markdown.extension.preview.autoShowPreviewToSide`         | `false`    | Automatically show preview when opening a Markdown file.                                         |
-| `markdown.extension.print.absoluteImgPath`                 | `true`     | Convert image path to absolute path                                                              |
-| `markdown.extension.print.imgToBase64`                     | `false`    | Convert images to base64 when printing to HTML                                                   |
-| `markdown.extension.print.includeVscodeStylesheets`        | `true`     | Whether to include VS Code's default styles                                                      |
-| `markdown.extension.print.onFileSave`                      | `false`    | Print to HTML on file save                                                                       |
-| `markdown.extension.print.theme`                           | `light`    | Theme of the exported HTML                                                                       |
-| `markdown.extension.print.validateUrls`                    | `true`     | Enable/disable URL validation when printing                                                      |
-| `markdown.extension.syntax.decorations`                    | `true`     | Add decorations to ~~strikethrough~~ and `code span`                                             |
-| `markdown.extension.syntax.decorationFileSizeLimit`        | 50000      | Don't render syntax decorations if a file is larger than this size (in byte/B)                   |
-| `markdown.extension.syntax.plainTheme`                     | `false`    | A distraction-free theme                                                                         |
-| `markdown.extension.tableFormatter.enabled`                | `true`     | Enable GFM table formatter                                                                       |
-| `markdown.extension.toc.slugifyMode`                       | `github`   | Slugify mode for TOC link generation (`vscode`, `github`, `gitlab` or `gitea`)                   |
-| `markdown.extension.toc.omittedFromToc`                    | `{}`       | Lists of headings to omit by project file (e.g. `{ "README.md": ["# Introduction"] }`)           |
-| `markdown.extension.toc.levels`                            | `1..6`     | Control the heading levels to show in the table of contents.                                     |
-| `markdown.extension.toc.orderedList`                       | `false`    | Use ordered list in the table of contents.                                                       |
-| `markdown.extension.toc.plaintext`                         | `false`    | Just plain text.                                                                                 |
-| `markdown.extension.toc.unorderedList.marker`              | `-`        | Use `-`, `*` or `+` in the table of contents (for unordered list)                                |
-| `markdown.extension.toc.updateOnSave`                      | `true`     | Automatically update the table of contents on save.                                              |
-
-</details>
-
-## FAQ
-
-#### Q: Error "command 'markdown.extension.onXXXKey' not found"
-
-- In most cases, it is because VS Code **needs a few seconds to load** this extension when you open a Markdown file *for the first time*. (You will see a message "Activating Extensions..." on the status bar.)
-
-- If you still see this "command not found" error after waiting for a long time, please try to **restart** VS Code. If needed, **reinstall** this extension:
-
-  1. Uninstall this extension.
-  2. **Close and restart VS Code. (important!)**
-  3. Reinstall this extension.
-
-- If it doesn't help, feel free to open a new issue on [GitHub](https://github.com/yzhang-gh/vscode-markdown/issues/new/choose). It would be better if you can report any suspicious error information to us: It's usually in VS Code's menubar **Help** > **Toggle Developer Tools** > **Console**.
-
-- (As a last resort, you may choose to delete `onXXXKey` keys through [VS Code's Keyboard Shortcuts editor](https://code.visualstudio.com/docs/getstarted/keybindings) if you do not need the [list editing feature](https://github.com/yzhang-gh/vscode-markdown#list-editing) at all.)
-
-#### Q: Which Markdown syntax is supported?
-
-- [CommonMark](https://spec.commonmark.org/)
-- [Tables](https://help.github.com/articles/organizing-information-with-tables/), [strikethrough](https://help.github.com/articles/basic-writing-and-formatting-syntax/#styling-text) and [task lists](https://docs.github.com/en/github/writing-on-github/basic-writing-and-formatting-syntax#task-lists) (from GitHub Flavored Markdown)
-- [Math support](https://github.com/waylonflinn/markdown-it-katex#syntax) (from KaTeX)
-- [Front matter](https://github.com/ParkSB/markdown-it-front-matter#valid-front-matter)
-
-For other Markdown syntax, you need to install the corresponding extensions from VS Code marketplace (e.g. [Mermaid diagram](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-mermaid), [emoji](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-emoji), [footnotes](https://marketplace.visualstudio.com/items?itemName=bierner.markdown-footnotes) and [superscript](https://marketplace.visualstudio.com/items?itemName=DevHawk.markdown-sup)). Once installed, they will take effect in VS Code and also the exported HTML file.
-
-#### Q: This extension has overridden some of my key bindings (e.g. <kbd>Ctrl</kbd> + <kbd>B</kbd>, <kbd>Alt</kbd> + <kbd>C</kbd>)
-
-You can easily manage key bindings with [VS Code's **Keyboard Shortcuts** editor](https://code.visualstudio.com/docs/getstarted/keybindings). (Commands provided by this extension have prefix `markdown.extension`.)
-
-#### Q: The extension is unresponsive, causing lag etc. (performance issues)
-
-From experience, there is *a good chance* that the performance issues are caused by *other extensions* (e.g., some spell checker extensions).
-
-This can be verified if you try again with all other extensions disabled (execute `Developer: Reload with Extensions Disabled` or `Extensions: Disable All Installed Extensions for this Workspace` in the VS Code command Palette) and then enable this extension.
-
-To find out the root cause, you can install our [development build](#latest-development-build) (`debug.vsix`) and create a CPU profile following this official [instruction](https://github.com/microsoft/vscode/wiki/Performance-Issues#profile-the-running-extensions) from the VS Code. And then please open a GitHub issue with that profile (`.cpuprofile.txt`) attached.
-
-## Changelog
-
-See [CHANGELOG](CHANGELOG.md) for more information.
-
-## Latest Development Build
-
-Download it [here](https://github.com/yzhang-gh/vscode-markdown/actions/workflows/main.yml?query=event%3Apush+is%3Asuccess), please click the latest passing event to download artifacts.
-
-There are two versions: `markdown-all-in-one-*.vsix` is the regular build, while `debug.vsix` is used to create a verbose CPU profile.
-
-To install, execute `Extensions: Install from VSIX...` in the VS Code Command Palette (`ctrl + shift + p`)
-
-## Contributing
-
-- File bugs, feature requests in [GitHub Issues](https://github.com/yzhang-gh/vscode-markdown/issues).
-- Leave a review on [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one#review-details).
-- Buy me a coffee ☕ (via [PayPal](https://www.paypal.me/2yzhang), [Alipay or WeChat](donate.md)).
-
-Special thanks to the collaborator [@Lemmingh](https://github.com/Lemmingh) and all other [contributors](https://github.com/yzhang-gh/vscode-markdown/graphs/contributors).
-
-[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/0)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/0)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/1)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/1)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/2)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/2)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/3)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/3)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/4)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/4)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/5)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/5)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/6)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/6)[![](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/images/7)](https://sourcerer.io/fame/yzhang-gh/yzhang-gh/vscode-markdown/links/7)
+- **Yu Zhang** and contributors for the excellent [Markdown All in One](https://github.com/yzhang-gh/vscode-markdown) extension
+- **Executable Books Team** for creating and maintaining MyST
+- **Jupyter Book community** for scientific publishing innovation
 
 ---
 
-## Related
-
-[More extensions of mine](https://marketplace.visualstudio.com/publishers/yzhang)
+**Happy MyST writing! 📖✨**

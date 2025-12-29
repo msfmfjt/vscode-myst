@@ -6,14 +6,22 @@ import { window } from "vscode";
 /**
  * the wasm equivalent to just doing `import * as zolaSLug from "zola-slug"`, which we can't do because it's a wasm module
  */
-let zolaSlug: typeof import("zola-slug");
+let zolaSlug: any;
 
 /**
  * Ideally this function is called before any code that relies on slugify,
  * and any code that relies on slugify should be called in the `then` block.
  */
 export async function importZolaSlug() {
-    zolaSlug = await import("zola-slug");
+    try {
+        // Check if zola-slug module exists before importing
+        const moduleName = 'zola-slug';
+        zolaSlug = await import(/* webpackIgnore: true */ moduleName);
+    } catch (error) {
+        // Zola slug package not available (needs wasm-pack build)
+        console.warn("Zola slug package not available, falling back to GitHub slugify");
+        zolaSlug = null;
+    }
 }
 
 const utf8Encoder = new TextEncoder();
@@ -46,7 +54,7 @@ function mdInlineToPlainText(text: string, env: object): string {
     // See #567, #585, #732, #792; #515; #179; #175, #575
     const inlineTokens = commonMarkEngine.engine.parseInline(text, env)[0].children!;
 
-    return inlineTokens.reduce<string>((result, token) => {
+    return inlineTokens.reduce((result: string, token: any) => {
         switch (token.type) {
             case "image":
             case "html_inline":
@@ -149,7 +157,7 @@ const Slugify_Methods: { readonly [mode in SlugifyMode]: (rawContent: string, en
             // Simulate <https://github.com/microsoft/vscode/blob/0a57fd87b1d1ef0ff81750f84840ee4303b8800b/extensions/markdown-language-features/src/markdownEngine.ts#L286>.
             // Not the same, but should cover most needs.
             commonMarkEngine.engine.parseInline(rawContent, env)[0].children!
-                .reduce<string>((result, token) => result + token.content, "")
+                .reduce((result: string, token: any) => result + token.content, "")
                 .trim()
                 .toLowerCase()
                 .replace(/\s+/g, "-") // Replace whitespace with -
@@ -160,12 +168,12 @@ const Slugify_Methods: { readonly [mode in SlugifyMode]: (rawContent: string, en
     },
 
     [SlugifyMode.Zola]: (rawContent: string, env: object): string => {
-        if (zolaSlug !== undefined) {
+        if (zolaSlug !== undefined && zolaSlug !== null) {
             return zolaSlug.slugify(mdInlineToPlainText(rawContent, env));
         } else {
-            importZolaSlug();
-            window.showErrorMessage("Importing Zola Slug... Please try again.");
-            return rawContent; //unsure if we should throw an error, let it fail or return the original content
+            // Fall back to GitHub slugify if Zola slug is not available
+            console.warn("Zola slug not available, falling back to GitHub slugify");
+            return Slugify_Methods[SlugifyMode.GitHub](rawContent, env);
         }
     }
 };
