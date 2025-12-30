@@ -14,9 +14,10 @@ let zolaSlug: any;
  */
 export async function importZolaSlug() {
     try {
-        // Check if zola-slug module exists before importing
-        const moduleName = 'zola-slug';
-        zolaSlug = await import(/* webpackIgnore: true */ moduleName);
+        // WASM module loading - temporarily disabled as it requires special build setup
+        // TODO: Re-enable when WASM build is properly configured
+        console.warn("Zola WASM slug temporarily disabled, using GitHub slugify");
+        zolaSlug = null;
     } catch (error) {
         // Zola slug package not available (needs wasm-pack build)
         console.warn("Zola slug package not available, falling back to GitHub slugify");

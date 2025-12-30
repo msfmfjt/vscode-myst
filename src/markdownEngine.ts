@@ -2,7 +2,9 @@
 
 import * as vscode from "vscode";
 import MarkdownIt = require("markdown-it");
-import Token = require("markdown-it/lib/token");
+// Use MarkdownIt Token class directly  
+const mdInstance = new MarkdownIt();
+type Token = ReturnType<typeof mdInstance.parse>[0];
 import type IDisposable from "./IDisposable";
 import { slugify } from "./util/slugify";
 import { getMarkdownContributionProvider } from './markdownExtensions';
