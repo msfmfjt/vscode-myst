@@ -1,0 +1,126 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build extension
+      run: npm run vscode:prepublish
+      env:
+        CI: true
+        NODE_ENV: production
+
+    - name: Get version from tag
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+    - name: Verify package.json version matches tag
+      run: |
+        PACKAGE_VERSION=$(node -p "require('./package.json').version")
+        TAG_VERSION="${{ steps.get_version.outputs.version }}"
+        if [ "$PACKAGE_VERSION" != "$TAG_VERSION" ]; then
+          echo "Error: package.json version ($PACKAGE_VERSION) doesn't match tag version ($TAG_VERSION)"
+          exit 1
+        fi
+        echo "Version check passed: $PACKAGE_VERSION"
+
+    - name: Package extension
+      run: |
+        npx @vscode/vsce package --out "myst-all-in-one-${{ steps.get_version.outputs.version }}.vsix"
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.get_version.outputs.tag }}
+        release_name: MyST All in One v${{ steps.get_version.outputs.version }}
+        draft: false
+        prerelease: ${{ contains(steps.get_version.outputs.version, '-') }}
+        body: |
+          ## MyST All in One v${{ steps.get_version.outputs.version }}
+          
+          ### What's New
+          
+          Please see the [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for detailed changes.
+          
+          ### Installation
+          
+          1. Download the `.vsix` file from the assets below
+          2. Open VS Code
+          3. Go to Extensions view (Ctrl+Shift+X)
+          4. Click on the "..." menu and select "Install from VSIX..."
+          5. Select the downloaded `.vsix` file
+          
+          Or install directly from the VS Code Marketplace: [MyST All in One](https://marketplace.visualstudio.com/items?itemName=mystx.myst-all-in-one)
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./myst-all-in-one-${{ steps.get_version.outputs.version }}.vsix
+        asset_name: myst-all-in-one-${{ steps.get_version.outputs.version }}.vsix
+        asset_content_type: application/zip
+
+    - name: Save VSIX for marketplace publishing
+      uses: actions/upload-artifact@v4
+      with:
+        name: vsix-package
+        path: ./myst-all-in-one-${{ steps.get_version.outputs.version }}.vsix
+        retention-days: 30
+
+  # Uncomment this job when you're ready to publish to VS Code Marketplace
+  # marketplace-publish:
+  #   needs: release
+  #   runs-on: ubuntu-latest
+  #   if: "!contains(github.ref, '-')"  # Only for stable releases, not pre-releases
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
+  #     
+  #   - name: Setup Node.js
+  #     uses: actions/setup-node@v4
+  #     with:
+  #       node-version: 20
+  #       cache: 'npm'
+  #       
+  #   - name: Install dependencies
+  #     run: npm ci
+  #     
+  #   - name: Build extension
+  #     run: npm run vscode:prepublish
+  #     env:
+  #       CI: true
+  #       NODE_ENV: production
+  #       
+  #   - name: Publish to VS Code Marketplace
+  #     run: npx @vscode/vsce publish -p ${{ secrets.VSCE_TOKEN }}
+  #     env:
+  #       VSCE_TOKEN: ${{ secrets.VSCE_TOKEN }}

@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18, 20]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run TypeScript compilation
+      run: npm run pretest
+
+    - name: Run build
+      run: npm run build
+      env:
+        CI: true
+        NODE_ENV: production
+
+    - name: Run tests
+      run: npm test
+      env:
+        CI: true
+
+    - name: Upload build artifacts
+      if: matrix.node-version == 20
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-output
+        path: |
+          dist/
+          out/
+        retention-days: 7
+
+    - name: Check package.json for publishability
+      if: matrix.node-version == 20
+      run: npm pack --dry-run
+
+  lint-and-format:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Check TypeScript types
+      run: npx tsc --noEmit
+
+    - name: Check for common issues
+      run: |
+        # Check for TODO/FIXME comments in source code
+        if grep -r "TODO\|FIXME" src/ --exclude-dir=node_modules || true; then
+          echo "Found TODO/FIXME comments in source code"
+        fi
+        
+        # Verify package.json structure
+        node -e "
+          const pkg = require('./package.json');
+          if (!pkg.name || !pkg.version || !pkg.main) {
+            console.error('Invalid package.json structure');
+            process.exit(1);
+          }
+          console.log('Package.json structure is valid');
+        "
