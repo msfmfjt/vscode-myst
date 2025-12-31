@@ -53,20 +53,29 @@ jobs:
           exit 1
         fi
         
-    - name: Test VSIX package creation
+    - name: Create VSIX package
       if: matrix.node-version == 20
       run: |
-        echo "📦 Testing VSIX package creation..."
-        npx @vscode/vsce package --out test.vsix
-        if [ -f "test.vsix" ]; then
+        echo "📦 Creating VSIX package..."
+        npx @vscode/vsce package --out "myst-all-in-one-${{ github.sha }}.vsix"
+        
+        if [ -f "myst-all-in-one-${{ github.sha }}.vsix" ]; then
           echo "✅ VSIX package created successfully"
-          ls -lh test.vsix
-          file test.vsix
+          ls -lh "myst-all-in-one-${{ github.sha }}.vsix"
+          file "myst-all-in-one-${{ github.sha }}.vsix"
         else
           echo "❌ VSIX package creation failed"
           exit 1
         fi
 
+    - name: Upload VSIX package
+      if: matrix.node-version == 20
+      uses: actions/upload-artifact@v4
+      with:
+        name: vsix-package
+        path: "myst-all-in-one-${{ github.sha }}.vsix"
+        retention-days: 30
+        
     - name: Upload build artifacts
       if: matrix.node-version == 20
       uses: actions/upload-artifact@v4

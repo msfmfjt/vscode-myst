@@ -1,0 +1,103 @@
+name: Build VSIX
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_suffix:
+        description: 'Version suffix (e.g., -beta, -rc1)'
+        required: false
+        default: ''
+  push:
+    branches: [ develop, feature/* ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-vsix:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci --legacy-peer-deps
+
+    - name: Build extension
+      run: npm run build
+      env:
+        CI: true
+        NODE_ENV: production
+
+    - name: Get commit info
+      id: commit
+      run: |
+        echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+        echo "branch_name=$(echo ${GITHUB_REF#refs/heads/} | sed 's/[^a-zA-Z0-9-]/-/g')" >> $GITHUB_OUTPUT
+        echo "timestamp=$(date '+%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+
+    - name: Create VSIX package
+      run: |
+        # Generate filename based on context
+        if [ "${{ github.event_name }}" = "pull_request" ]; then
+          FILENAME="myst-all-in-one-pr${{ github.event.number }}-${{ steps.commit.outputs.sha_short }}.vsix"
+        elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          SUFFIX="${{ github.event.inputs.version_suffix }}"
+          FILENAME="myst-all-in-one-manual$SUFFIX-${{ steps.commit.outputs.sha_short }}.vsix"
+        else
+          FILENAME="myst-all-in-one-${{ steps.commit.outputs.branch_name }}-${{ steps.commit.outputs.sha_short }}.vsix"
+        fi
+        
+        echo "Building VSIX: $FILENAME"
+        npx @vscode/vsce package --out "$FILENAME"
+        
+        echo "vsix_filename=$FILENAME" >> $GITHUB_OUTPUT
+        
+        # Display package info
+        ls -lh "$FILENAME"
+        echo "Package created: $FILENAME"
+      id: package
+
+    - name: Upload VSIX package
+      uses: actions/upload-artifact@v4
+      with:
+        name: vsix-${{ steps.commit.outputs.sha_short }}
+        path: ${{ steps.package.outputs.vsix_filename }}
+        retention-days: 90
+
+    - name: Add PR comment with download link
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { data: run } = await github.rest.actions.getWorkflowRun({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            run_id: context.runId
+          });
+          
+          const comment = `## 📦 VSIX Package Built
+          
+          A VSIX package has been built for this PR!
+          
+          **Download:** [vsix-${{ steps.commit.outputs.sha_short }}](${run.html_url}/artifacts)
+          
+          **Installation:**
+          1. Download the artifact from the link above
+          2. Extract the .vsix file
+          3. In VS Code: Extensions view → "..." menu → "Install from VSIX..."
+          
+          **Commit:** ${{ steps.commit.outputs.sha_short }}`;
+          
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: comment
+          });

@@ -53,41 +53,61 @@ jobs:
         npx @vscode/vsce package --out "myst-all-in-one-${{ steps.get_version.outputs.version }}.vsix"
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: actions/github-script@v7
       with:
-        tag_name: ${{ steps.get_version.outputs.tag }}
-        release_name: MyST All in One v${{ steps.get_version.outputs.version }}
-        draft: false
-        prerelease: ${{ contains(steps.get_version.outputs.version, '-') }}
-        body: |
-          ## MyST All in One v${{ steps.get_version.outputs.version }}
+        script: |
+          const fs = require('fs');
+          const version = '${{ steps.get_version.outputs.version }}';
+          const tag = '${{ steps.get_version.outputs.tag }}';
+          const isPrerelease = version.includes('-');
           
-          ### What's New
-          
-          Please see the [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for detailed changes.
-          
-          ### Installation
-          
-          1. Download the `.vsix` file from the assets below
-          2. Open VS Code
-          3. Go to Extensions view (Ctrl+Shift+X)
-          4. Click on the "..." menu and select "Install from VSIX..."
-          5. Select the downloaded `.vsix` file
-          
-          Or install directly from the VS Code Marketplace: [MyST All in One](https://marketplace.visualstudio.com/items?itemName=mystx.myst-all-in-one)
+          // Create release
+          const release = await github.rest.repos.createRelease({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            tag_name: tag,
+            name: `MyST All in One v${version}`,
+            draft: false,
+            prerelease: isPrerelease,
+            body: `## MyST All in One v${version}
+            
+### What's New
 
-    - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./myst-all-in-one-${{ steps.get_version.outputs.version }}.vsix
-        asset_name: myst-all-in-one-${{ steps.get_version.outputs.version }}.vsix
-        asset_content_type: application/zip
+Please see the [CHANGELOG.md](https://github.com/${context.repo.owner}/${context.repo.repo}/blob/main/CHANGELOG.md) for detailed changes.
+
+### Installation
+
+1. Download the \`.vsix\` file from the assets below
+2. Open VS Code
+3. Go to Extensions view (Ctrl+Shift+X)
+4. Click on the "..." menu and select "Install from VSIX..."
+5. Select the downloaded \`.vsix\` file
+
+Or install directly from the VS Code Marketplace: [MyST All in One](https://marketplace.visualstudio.com/items?itemName=mystx.myst-all-in-one)
+
+### Package Info
+
+- **Size:** ${fs.statSync(\`myst-all-in-one-\${version}.vsix\`).size} bytes
+- **Build:** ${context.sha.substring(0, 7)}
+- **Node.js:** ${process.version}`
+          });
+          
+          // Upload VSIX file
+          const vsixPath = \`myst-all-in-one-\${version}.vsix\`;
+          const vsixContent = fs.readFileSync(vsixPath);
+          
+          await github.rest.repos.uploadReleaseAsset({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            release_id: release.data.id,
+            name: \`myst-all-in-one-\${version}.vsix\`,
+            data: vsixContent,
+            headers: {
+              'content-type': 'application/zip',
+            },
+          });
+          
+          console.log(\`Release created: \${release.data.html_url}\`);
 
     - name: Save VSIX for marketplace publishing
       uses: actions/upload-artifact@v4
